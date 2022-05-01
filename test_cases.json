@@ -1,0 +1,8 @@
+[
+    "SELECT * FROM {table_name} ORDER BY ClickCost LIMIT 5",
+    "SELECT count(*) FROM {table_name} WHERE ClickCost > 10",
+    "SELECT min(Timestamp), max(Timestamp) FROM {table_name}",
+    "SELECT * FROM {table_name} WHERE ClickType = 3 ORDER BY ClickCost LIMIT 5",
+    "SELECT UserID, sum(ClickCost), count(ClickCost) FROM {table_name} WHERE ClickCost > 0 GROUP BY UserID LIMIT 5",
+    "SELECT UserID, sum(ClickCost) FROM {table_name} WHERE ClickType = 2 GROUP BY UserID ORDER BY sum(ClickCost) LIMIT 5"
+]

@@ -1,0 +1,17 @@
+{
+    "MySQL": {
+        "host": "rc1b-g3nw1w2n9d26jzdz.mdb.yandexcloud.net",
+        "port": "3306",
+        "db": "db1",
+        "user": "user1",
+        "password": "qwerty123"
+    },
+    "PostgreSQL": {
+        "host": "rc1b-3wnum1cy717impju.mdb.yandexcloud.net",
+        "port": "6432",
+        "db": "db1",
+        "user": "user1",
+        "password": "qwerty123",
+        "sslmode": "sslmode=verify-full"
+    }
+}
