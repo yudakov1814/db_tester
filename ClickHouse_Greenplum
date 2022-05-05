@@ -1,0 +1,37 @@
+100000000 records
+
+ClickHouse.add_records in 92.490 s
+Greenplum.add_records in 965.112 s
+
+query: SELECT * FROM test_62fgn ORDER BY ClickCost LIMIT 5
+ClickHouse.select in 0.263 s
+Greenplum.select in 1.665 s
+
+query: SELECT count(*) FROM test_62fgn WHERE ClickCost > 10
+ClickHouse.select in 0.040 s
+Greenplum.select in 0.932 s
+
+query: SELECT min(Timestamp), max(Timestamp) FROM test_62fgn
+ClickHouse.select in 0.033 s
+Greenplum.select in 0.862 s
+
+query: SELECT * FROM test_62fgn WHERE ClickType = 3 ORDER BY ClickCost LIMIT 5
+ClickHouse.select in 0.317 s
+Greenplum.select in 0.871 s
+
+query: SELECT UserID, sum(ClickCost), count(ClickCost) FROM test_62fgn WHERE ClickCost > 0 GROUP BY UserID LIMIT 5
+ClickHouse.select in 0.940 s
+Greenplum.select in 5.502 s
+
+query: SELECT UserID, sum(ClickCost) FROM test_62fgn WHERE ClickType = 2 GROUP BY UserID ORDER BY sum(ClickCost) LIMIT 5
+ClickHouse.select in 0.200 s
+Greenplum.select in 1.786 s
+
+query: SELECT UserID, sum(ClickCost), count(ClickCost) FROM test_62fgn GROUP BY UserID HAVING sum(case when ClickType = 1 then 1 end) > 0 ORDER BY sum(ClickCost) LIMIT 5
+ClickHouse.select in 1.079 s
+Greenplum.select in 7.607 s
+
+All queries
+ClickHouse.select in 2.872 s
+Greenplum.select in 19.224 s
+

@@ -3,46 +3,50 @@ import json
 import time
 import random
 
-from base_client import DbClient
+from clickhouse import ClickHouseClient
+from greenplum import GreenplumClient
 from mysql import MysqlClient
 from postgresql import PostgresqlClient
 
-
-FILE_NAME = "result4"
+FILE_NAME = "result"
 FILE = open(FILE_NAME, "w")
-BATCH_SIZE = 10000
-BATCHES = 1000
+BATCH_SIZE = 1
+BATCHES = 1
 
 db_config = json.load(open("db_config.json", "r"))
+db_schemes = json.load(open("db_schemes.json", "r"))
 test_cases = json.load(open("test_cases.json", "r"))
-test_config = {
-    "MySQL": {
-        "client": MysqlClient,
-        "schema": {
-            "Timestamp": "INT",
-            "UserID": "CHAR(16)",
-            "RequestID": "CHAR(32)",
-            "ClickType": "SMALLINT",
-            "ClickCost": "INT",
-            "ElementType": "SMALLINT",
-            "ElementName": "VARCHAR(200)",
-            "Position": "SMALLINT",
-        },
-    },
-    "PostgreSQL": {
-        "client": PostgresqlClient,
-        "schema": {
-            "Timestamp": "integer",
-            "UserID": "char(16)",
-            "RequestID": "char(32)",
-            "ClickType": "smallint",
-            "ClickCost": "integer",
-            "ElementType": "smallint",
-            "ElementName": "varchar(200)",
-            "Position": "smallint",
-        },
-    },
+
+CLICKHOUSE_KEY = "ClickHouse"
+MYSQL_KEY = "MySQL"
+POSTGRESQL_KEY = "PostgreSQL"
+GREENPLUM_KEY = "Greenplum"
+
+DB_KEYS = [
+    CLICKHOUSE_KEY,
+    MYSQL_KEY,
+    POSTGRESQL_KEY,
+    GREENPLUM_KEY,
+]
+
+key_to_client = {
+    CLICKHOUSE_KEY: ClickHouseClient,
+    MYSQL_KEY: MysqlClient,
+    POSTGRESQL_KEY: PostgresqlClient,
+    GREENPLUM_KEY: GreenplumClient,
 }
+
+KEYS_TO_LAUNCH = [
+    MYSQL_KEY,
+    POSTGRESQL_KEY,
+]
+
+
+def get_db_scheme(db_key: str) -> dict:
+    return {
+        field["Name"]: field[f"{db_key} Type"]
+        for field in db_schemes
+    }
 
 
 def random_str(length):
@@ -53,53 +57,50 @@ def random_str(length):
     return s
 
 
-def get_clients() -> dict:
-    return {
-        name: data["client"](db_config[name])
-        for name, data in test_config.items()
-    }
+def get_random_record():
+    record = {}
+
+    for field in db_schemes:
+        py_type = field["Python Type"]
+        randint = random.randint(field["Min"], field["Max"])
+        if py_type == "int":
+            record[field["Name"]] = randint
+        elif py_type == "str":
+            record[field["Name"]] = random_str(randint)
+        else:
+            raise RuntimeError("Unexpected python type '{py_type}'")
+
+    return record
 
 
-def get_records(count: int) -> list:
-    return [
-        {
-            "Timestamp": random.randint(1650855600, 1650891600),
-            "UserID": random_str(16),
-            "RequestID": random_str(32),
-            "ClickType": random.randint(1, 5),
-            "ClickCost": random.randint(0, 1000),
-            "ElementType": random.randint(1, 50),
-            "ElementName": random_str(random.randint(15, 100)),
-            "Position": random.randint(0, 100),
-        }
-        for _ in range(count)
-    ]
+def get_random_records(count: int) -> list:
+    return [get_random_record() for _ in range(count)]
 
 
-def create_table(name: str, client: DbClient, table_name: str) -> None:
-    client.create_table(table_name, test_config[name]["schema"])
+def create_table(launch: dict, table_name: str) -> None:
+    launch["client"].create_table(table_name, launch["scheme"])
 
 
-def add_records(name: str, client: DbClient, table_name: str, records: list) -> None:
-    client.add_records(table_name, test_config[name]["schema"], records)
+def add_records(launch: dict, table_name: str, records: list) -> None:
+    launch["client"].add_records(table_name, launch["scheme"], records)
 
 
-def select(name: str, client: DbClient, query: str) -> list:
-    return client.select(query)
+def select(launch: dict, query: str) -> list:
+    return launch["client"].select(query)
 
 
-def drop_table(name: str, client: DbClient, table_name: str) -> None:
-    client.drop_table(table_name)
+def drop_table(launch: dict, table_name: str) -> None:
+    launch["client"].drop_table(table_name)
 
 
 def exec_all_clients(clients: dict, func, *args) -> dict:
     data = {}
 
-    for name, client in clients.items():
+    for key, launch in clients.items():
         start = time.perf_counter()
-        func(name, client, *args)
+        func(launch, *args)
         end = time.perf_counter()
-        data[f"{type(client).__name__}.{func.__name__}"] = end - start
+        data[f"{key}.{func.__name__}"] = end - start
 
     return data
 
@@ -113,14 +114,24 @@ def print_data(data: dict) -> None:
 
 def main():
     table_name = f"test_{random_str(5)}"
-    clients = get_clients()
+    launches = {
+        key: {
+            "client": key_to_client[key](db_config[key]),
+            "scheme": get_db_scheme(key),
+        }
+        for key in KEYS_TO_LAUNCH
+    }
+
+    print(f"{BATCH_SIZE * BATCHES} records", file=FILE)
+    print(file=FILE)
+
     try:
-        exec_all_clients(clients, create_table, table_name)
+        exec_all_clients(launches, create_table, table_name)
 
         add_records_data = defaultdict(float)
         for _ in range(BATCHES):
-            records = get_records(BATCH_SIZE)
-            temp_data = exec_all_clients(clients, add_records, table_name, records)
+            records = get_random_records(BATCH_SIZE)
+            temp_data = exec_all_clients(launches, add_records, table_name, records)
             for name, time in temp_data.items():
                 add_records_data[name] += time
         print_data(add_records_data)
@@ -129,14 +140,14 @@ def main():
         for query in test_cases:
             query = query.format(table_name=table_name)
             print(f"query: {query}", file=FILE)
-            select_data = exec_all_clients(clients, select, query)
+            select_data = exec_all_clients(launches, select, query)
             print_data(select_data)
             for name, time in select_data.items():
                 all_select_data[name] += time
         print("All queries", file=FILE)
         print_data(all_select_data)
     finally:
-        exec_all_clients(clients, drop_table, table_name)
+        exec_all_clients(launches, drop_table, table_name)
 
 
 if __name__ == "__main__":

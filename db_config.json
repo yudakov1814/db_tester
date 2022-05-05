@@ -1,13 +1,27 @@
 {
+    "ClickHouse": {
+        "host": "rc1a-2zod3m6smqe92vey.mdb.yandexcloud.net",
+        "port": "8443",
+        "db": "db1",
+        "user": "user1",
+        "password": "qwerty123"
+    },
+    "Greenplum": {
+        "host": "rc1b-6psqu2o89s3u577p.mdb.yandexcloud.net",
+        "port": "5432",
+        "db": "postgres",
+        "user": "user1",
+        "password": "qwerty123"
+    },
     "MySQL": {
-        "host": "rc1b-g3nw1w2n9d26jzdz.mdb.yandexcloud.net",
+        "host": "rc1b-52prgaass668eo5j.mdb.yandexcloud.net",
         "port": "3306",
         "db": "db1",
         "user": "user1",
         "password": "qwerty123"
     },
     "PostgreSQL": {
-        "host": "rc1b-3wnum1cy717impju.mdb.yandexcloud.net",
+        "host": "rc1b-p1qo775nhh9edc9c.mdb.yandexcloud.net",
         "port": "6432",
         "db": "db1",
         "user": "user1",
