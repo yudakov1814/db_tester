@@ -14,14 +14,14 @@
         "password": "qwerty123"
     },
     "MySQL": {
-        "host": "rc1a-yoxxd89cnz8yw9g5.mdb.yandexcloud.net",
+        "host": "rc1b-52prgaass668eo5j.mdb.yandexcloud.net",
         "port": "3306",
         "db": "db1",
         "user": "user1",
         "password": "qwerty123"
     },
     "PostgreSQL": {
-        "host": "rc1a-yvlbbe9y0u3zeryu.mdb.yandexcloud.net",
+        "host": "rc1b-p1qo775nhh9edc9c.mdb.yandexcloud.net",
         "port": "6432",
         "db": "db1",
         "user": "user1",
