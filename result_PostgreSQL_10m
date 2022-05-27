@@ -1,0 +1,32 @@
+Launches=('PostgreSQL',)
+Batch size=5000
+Created table 'test_j41b7'
+Inserted 10000000 records
+
+PostgreSQL.add_records in 234.752 s
+
+query: SELECT * FROM test_j41b7 ORDER BY ClickCost LIMIT 5
+PostgreSQL.select in 6.082 s
+
+query: SELECT count(*) FROM test_j41b7 WHERE ClickCost > 10
+PostgreSQL.select in 0.828 s
+
+query: SELECT min(Timestamp), max(Timestamp) FROM test_j41b7
+PostgreSQL.select in 0.449 s
+
+query: SELECT * FROM test_j41b7 WHERE ClickType = 3 ORDER BY ClickCost LIMIT 5
+PostgreSQL.select in 0.498 s
+
+query: SELECT UserID, sum(ClickCost), count(ClickCost) FROM test_j41b7 WHERE ClickCost > 0 GROUP BY UserID LIMIT 5
+PostgreSQL.select in 6.032 s
+
+query: SELECT UserID, sum(ClickCost) FROM test_j41b7 WHERE ClickType = 2 GROUP BY UserID ORDER BY sum(ClickCost) LIMIT 5
+PostgreSQL.select in 1.813 s
+
+query: SELECT UserID, sum(ClickCost), count(ClickCost) FROM test_j41b7 GROUP BY UserID HAVING sum(case when ClickType = 1 then 1 end) > 0 ORDER BY sum(ClickCost) LIMIT 5
+PostgreSQL.select in 10.750 s
+
+All queries
+PostgreSQL.select in 26.452 s
+
+Dropped table 'test_j41b7'

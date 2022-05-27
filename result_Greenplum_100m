@@ -1,0 +1,32 @@
+Launches=('Greenplum',)
+Batch size=10000
+Created table 'test_1f6hl'
+Inserted 100000000 records
+
+Greenplum.add_records in 10255.291 s
+
+query: SELECT * FROM test_1f6hl ORDER BY ClickCost LIMIT 5
+Greenplum.select in 15.359 s
+
+query: SELECT count(*) FROM test_1f6hl WHERE ClickCost > 10
+Greenplum.select in 8.502 s
+
+query: SELECT min(Timestamp), max(Timestamp) FROM test_1f6hl
+Greenplum.select in 7.971 s
+
+query: SELECT * FROM test_1f6hl WHERE ClickType = 3 ORDER BY ClickCost LIMIT 5
+Greenplum.select in 8.388 s
+
+query: SELECT UserID, sum(ClickCost), count(ClickCost) FROM test_1f6hl WHERE ClickCost > 0 GROUP BY UserID LIMIT 5
+Greenplum.select in 64.688 s
+
+query: SELECT UserID, sum(ClickCost) FROM test_1f6hl WHERE ClickType = 2 GROUP BY UserID ORDER BY sum(ClickCost) LIMIT 5
+Greenplum.select in 17.601 s
+
+query: SELECT UserID, sum(ClickCost), count(ClickCost) FROM test_1f6hl GROUP BY UserID HAVING sum(case when ClickType = 1 then 1 end) > 0 ORDER BY sum(ClickCost) LIMIT 5
+Greenplum.select in 109.055 s
+
+All queries
+Greenplum.select in 231.564 s
+
+Dropped table 'test_1f6hl'

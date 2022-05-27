@@ -1,0 +1,90 @@
+[
+    {
+        "Name": "Timestamp",
+        "ClickHouse Type": "Int32",
+        "Greenplum Type": "integer",
+        "MySQL Type": "INT",
+        "PostgreSQL Type": "integer",
+        "Ydb Type": "Int32",
+        "Python Type": "int",
+        "Min": 1650855600,
+        "Max": 1650891600
+    },
+    {
+        "Name": "UserID",
+        "ClickHouse Type": "FixedString(16)",
+        "Greenplum Type": "char(16)",
+        "MySQL Type": "CHAR(16)",
+        "PostgreSQL Type": "char(16)",
+        "Ydb Type": "String",
+        "Python Type": "str",
+        "Min": 16,
+        "Max": 16
+    },
+    {
+        "Name": "RequestID",
+        "ClickHouse Type": "FixedString(32)",
+        "Greenplum Type": "char(32)",
+        "MySQL Type": "CHAR(32)",
+        "PostgreSQL Type": "char(32)",
+        "Ydb Type": "String",
+        "Python Type": "str",
+        "Min": 32,
+        "Max": 32
+    },
+    {
+        "Name": "ClickType",
+        "ClickHouse Type": "Int16",
+        "Greenplum Type": "smallint",
+        "MySQL Type": "SMALLINT",
+        "PostgreSQL Type": "smallint",
+        "Ydb Type": "Int32",
+        "Python Type": "int",
+        "Min": 1,
+        "Max": 5
+    },
+    {
+        "Name": "ClickCost",
+        "ClickHouse Type": "Int32",
+        "Greenplum Type": "integer",
+        "MySQL Type": "INT",
+        "PostgreSQL Type": "integer",
+        "Ydb Type": "Int32",
+        "Python Type": "int",
+        "Min": 0,
+        "Max": 1000
+    },
+    {
+        "Name": "ElementType",
+        "ClickHouse Type": "Int16",
+        "Greenplum Type": "smallint",
+        "MySQL Type": "SMALLINT",
+        "PostgreSQL Type": "smallint",
+        "Ydb Type": "Int32",
+        "Python Type": "int",
+        "Min": 1,
+        "Max": 50
+    },
+    {
+        "Name": "ElementName",
+        "ClickHouse Type": "String",
+        "Greenplum Type": "varchar(200)",
+        "MySQL Type": "VARCHAR(200)",
+        "PostgreSQL Type": "varchar(200)",
+        "Ydb Type": "String",
+        "Python Type": "str",
+        "Min": 15,
+        "Max": 100
+    },
+    {
+        "Name": "Position",
+        "ClickHouse Type": "Int16",
+        "Greenplum Type": "smallint",
+        "MySQL Type": "SMALLINT",
+        "PostgreSQL Type": "smallint",
+        "Ydb Type": "Int32",
+        "Python Type": "int",
+        "Min": 0,
+        "Max": 100
+    }
+]

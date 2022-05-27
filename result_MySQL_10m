@@ -1,0 +1,32 @@
+Launches=('MySQL',)
+Batch size=5000
+Created table 'test_xiyn1'
+Inserted 10000000 records
+
+MySQL.add_records in 186.258 s
+
+query: SELECT * FROM test_xiyn1 ORDER BY ClickCost LIMIT 5
+MySQL.select in 8.123 s
+
+query: SELECT count(*) FROM test_xiyn1 WHERE ClickCost > 10
+MySQL.select in 4.814 s
+
+query: SELECT min(Timestamp), max(Timestamp) FROM test_xiyn1
+MySQL.select in 5.165 s
+
+query: SELECT * FROM test_xiyn1 WHERE ClickType = 3 ORDER BY ClickCost LIMIT 5
+MySQL.select in 7.030 s
+
+query: SELECT UserID, sum(ClickCost), count(ClickCost) FROM test_xiyn1 WHERE ClickCost > 0 GROUP BY UserID LIMIT 5
+MySQL.select in 80.737 s
+
+query: SELECT UserID, sum(ClickCost) FROM test_xiyn1 WHERE ClickType = 2 GROUP BY UserID ORDER BY sum(ClickCost) LIMIT 5
+MySQL.select in 7.999 s
+
+query: SELECT UserID, sum(ClickCost), count(ClickCost) FROM test_xiyn1 GROUP BY UserID HAVING sum(case when ClickType = 1 then 1 end) > 0 ORDER BY sum(ClickCost) LIMIT 5
+MySQL.select in 90.350 s
+
+All queries
+MySQL.select in 204.218 s
+
+Dropped table 'test_xiyn1'
